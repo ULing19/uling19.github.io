@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海宁许村 · 婚礼住宿与行程</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* 引入高级古典配色与排版变量 */
+        :root {
+            --primary-red: #8B0012;
+            --gradient-red: #590008;
+            --champagne-gold: #D4AF37;
+            --light-gold: #FDFBF7;
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --text-dark: #2C1E16;
+            --text-gray: #665C58;
+        }
+
+        body {
+            font-family: 'Songti SC', 'STSong', 'Noto Serif SC', 'Microsoft YaHei', serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #fdfbf7 0%, #f4e9e0 100%);
+            overflow-x: hidden;
+        }
+
+        /* 顶部视觉焕新：增加暗纹与流光溢彩的渐变 */
+        header {
+            background: linear-gradient(135deg, var(--gradient-red) 0%, var(--primary-red) 50%, var(--gradient-red) 100%);
+            background-size: 200% 200%;
+            animation: majesticFlow 15s ease infinite;
+            color: white;
+            text-align: center;
+            padding: 4.5rem 1.5rem 7rem;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(139, 0, 18, 0.4);
+            border-bottom: 8px solid var(--champagne-gold);
+        }
+
+        @keyframes majesticFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 增加顶部精致背景暗纹 */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M20 0l20 20-20 20L0 20z" fill="%23d4af37" fill-opacity="0.05" fill-rule="evenodd"/%3E%3C/svg%3E');
+            pointer-events: none;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            letter-spacing: 4px;
+            font-weight: bold;
+            text-shadow: 2px 4px 15px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        header h1::before, header h1::after {
+            content: '❀';
+            color: var(--champagne-gold);
+            font-size: 1.5rem;
+            opacity: 0.8;
+            animation: gentleRotate 8s linear infinite;
+        }
+
+        @keyframes gentleRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        header p {
+            color: var(--champagne-gold);
+            letter-spacing: 8px;
+            margin-top: 15px;
+            font-family: 'Microsoft YaHei', sans-serif;
+            font-weight: 300;
+        }
+
+        /* 倒计时模块的珠宝级拟物化设计 */
+        .countdown-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 16px;
+            display: inline-flex;
+            padding: 20px 30px;
+            margin-top: 30px;
+            gap: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .time-box:not(:last-child)::after {
+            content: ':';
+            position: absolute;
+            right: -16px;
+            top: 5px;
+            color: var(--champagne-gold);
+            font-size: 1.5rem;
+            opacity: 0.6;
+            font-family: sans-serif;
+        }
+
+        .time-num { 
+            font-size: 2.2rem; 
+            font-family: 'Helvetica Neue', sans-serif;
+            font-weight: 800; 
+            color: var(--light-gold); 
+            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.5);
+        }
+        
+        .time-label { 
+            font-size: 0.85rem; 
+            color: var(--champagne-gold);
+            margin-top: 5px;
+            letter-spacing: 2px;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        /* 升级后的卡片设计：高级感毛玻璃 */
+        .container {
+            max-width: 850px;
+            margin: -70px auto 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 40px rgba(139, 0, 18, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-top: 5px solid var(--champagne-gold);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            opacity: 0;
+            animation: gracefulEntrance 1s ease forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.3s; }
+        .card:nth-child(3) { animation-delay: 0.5s; }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(139, 0, 18, 0.12);
+        }
+
+        @keyframes gracefulEntrance {
+            from { opacity: 0; transform: translateY(40px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        h2 {
+            color: var(--primary-red);
+            font-size: 1.6rem;
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        h2::after {
+            content: '❖';
+            display: block;
+            color: var(--champagne-gold);
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.6;
+        }
+
+        /* 更加精致的交互控件 */
+        .search-area { display: flex; gap: 15px; margin-bottom: 25px; }
+        .search-input { 
+            flex: 1; 
+            padding: 18px 25px; 
+            border: 1px solid #e0d8d5; 
+            border-radius: 40px; 
+            font-size: 1.05rem; 
+            background: #fff;
+            transition: all 0.3s; 
+            font-family: 'Microsoft YaHei', sans-serif;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .search-input:focus { border-color: var(--champagne-gold); outline: none; box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15); }
+        .search-btn { 
+            background: linear-gradient(135deg, var(--primary-red), var(--gradient-red)); 
+            color: var(--light-gold); 
+            border: none; 
+            padding: 0 35px; 
+            border-radius: 40px; 
+            font-size: 1.05rem; 
+            cursor: pointer; 
+            font-weight: bold; 
+            letter-spacing: 1px;
+            box-shadow: 0 6px 15px rgba(139, 0, 18, 0.2);
+            transition: all 0.3s; 
+        }
+        .search-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139, 0, 18, 0.3); }
+        .search-btn:active { transform: translateY(1px); }
+
+        #searchResult {
+            display: none; background: #fffcf9; border: 1px solid var(--champagne-gold); padding: 25px; border-radius: 16px; text-align: center;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.1);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .result-name { font-size: 1.4rem; color: var(--primary-red); font-weight: bold; margin-bottom: 12px; }
+        .result-detail { font-size: 1.15rem; color: var(--text-gray); line-height: 1.8; font-family: 'Microsoft YaHei', sans-serif; }
+        .result-highlight { color: #b8860b; font-weight: bold; font-size: 1.25rem; background: rgba(212, 175, 55, 0.1); padding: 2px 8px; border-radius: 4px; }
+
+        .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .chart-container { position: relative; height: 280px; width: 100%; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-family: 'Microsoft YaHei', sans-serif; }
+        th { background: #fcf6f7; color: var(--primary-red); padding: 18px 15px; text-align: left; font-weight: bold; border-bottom: 2px solid rgba(139, 0, 18, 0.2); font-size: 1.05rem; }
+        td { padding: 18px 15px; border-bottom: 1px solid #f0e6e6; font-size: 1rem; }
+        
+        tbody tr { opacity: 0; animation: slideInRow 0.6s ease forwards; transition: background-color 0.3s; }
+        tbody tr:hover { background-color: #fdfaf6; }
+        
+        .tag { padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; }
+        .tag-room { background: #fff0f0; color: #c82333; border: 1px solid #ffcccc; }
+        .tag-local { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+        @media (max-width: 768px) {
+            header { padding: 3.5rem 1rem 6rem; }
+            .chart-grid { grid-template-columns: 1fr; gap: 20px; }
+            th:nth-child(3), td:nth-child(3) { display: none; }
+            .search-area { flex-direction: column; }
+            .search-btn { padding: 15px; }
+            .countdown-container { gap: 15px; padding: 15px; }
+            .time-num { font-size: 1.8rem; }
+            .time-box:not(:last-child)::after { right: -10px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>婚礼行程及住宿统筹</h1>
+    <p>海宁许村 · 期待相聚</p>
+    <div class="countdown-container" id="countdown-display">
+        </div>
+    <div style="margin-top:20px; font-size:0.95rem; font-family: 'Microsoft YaHei', sans-serif; opacity:0.9; letter-spacing: 1px;">
+        杭州大巴发车时间：4月25日 15:30
+    </div>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>专属行程快速查询</h2>
+        <div class="search-area">
+            <input type="text" id="searchInput" class="search-input" placeholder="请输入您的姓名 (如: 王聪)" onkeypress="handleKeyPress(event)">
+            <button class="search-btn" onclick="searchGuest()">查询我的安排</button>
+        </div>
+        <div id="searchResult"></div>
+    </div>
+
+    <div class="card">
+        <h2>全盘数据可视化</h2>
+        <div class="chart-grid">
+            <div class="chart-container"><canvas id="guestPieChart"></canvas></div>
+            <div class="chart-container"><canvas id="roomBarChart"></canvas></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>完整宾客接待名单</h2>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>姓名/家庭</th>
+                        <th>房型状态</th>
+                        <th>人数</th>
+                        <th>入住时间</th>
+                    </tr>
+                </thead>
+                <tbody id="guestTable"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const guests = [
+        {name: "父亲、母亲、章泓弟弟", room: "在杭州", num: 3, date: "-"},
+        {name: "章华洋、李华", room: "大床房", num: 2, date: "24号"},
+        {name: "章国翁、孩子", room: "大床或双床", num: 2, date: "24号"},
+        {name: "章新春一家", room: "双床或家庭房", num: 3, date: "24号"},
+        {name: "章曙明", room: "大床房", num: 1, date: "25号"},
+        {name: "章俏慧、王政党", room: "大床房", num: 2, date: "25号"},
+        {name: "王聪", room: "大床房", num: 2, date: "25号"},
+        {name: "章国霖、谢淑珍", room: "大床房", num: 2, date: "25号"},
+        {name: "章学士、章磊", room: "大床或双床", num: 2, date: "25号"},
+        {name: "章国志", room: "大床房", num: 2, date: "25号"},
+        {name: "章建君", room: "大床或双床", num: 2, date: "25号"},
+        {name: "章华澄", room: "大床房", num: 2, date: "25号"},
+        {name: "章华渠", room: "大床房", num: 2, date: "25号"},
+        {name: "章国瑾", room: "大床或家庭房", num: 2, date: "25号"},
+        {name: "陆孝神、卢香女", room: "大床房", num: 2, date: "24号"},
+        {name: "陆友义一家", room: "大床或家庭房", num: 3, date: "24号"},
+        {name: "卢小君一家", room: "双床或家庭房", num: 3, date: "25号"},
+        {name: "朱良情一家", room: "大床房", num: 2, date: "25号"},
+        {name: "卢立论一家", room: "大床房", num: 2, date: "25号"}
+    ];
+
+    // 更新发车时间为4月25日
+    function updateCountdown() {
+        const targetDate = new Date('2026-04-25T15:30:00').getTime();
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+        const displayContainer = document.getElementById('countdown-display');
+
+        if (distance > 0) {
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            const secs = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            
+            displayContainer.innerHTML = `
+                <div class="time-box"><span class="time-num">${days}</span><span class="time-label">天</span></div>
+                <div class="time-box"><span class="time-num">${hours}</span><span class="time-label">时</span></div>
+                <div class="time-box"><span class="time-num">${mins}</span><span class="time-label">分</span></div>
+                <div class="time-box"><span class="time-num">${secs}</span><span class="time-label">秒</span></div>
+            `;
+        } else {
+            displayContainer.innerHTML = '<div style="color: var(--light-gold); font-size: 1.6rem; font-weight: bold; letter-spacing: 3px; font-family: serif;">大巴已顺利发车，期待与您相聚！</div>';
+            displayContainer.style.border = 'none';
+            displayContainer.style.background = 'transparent';
+            displayContainer.style.boxShadow = 'none';
+        }
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    function handleKeyPress(e) { if(e.key === 'Enter') searchGuest(); }
+    
+    function searchGuest() {
+        const input = document.getElementById('searchInput').value.trim();
+        const resultDiv = document.getElementById('searchResult');
+        if (!input) return;
+
+        const found = guests.filter(g => g.name.includes(input));
+        
+        resultDiv.style.display = 'block';
+        if (found.length > 0) {
+            const guest = found[0];
+            const isHz = guest.room === "在杭州";
+            const arrangeText = isHz ? `您无需安排酒店，请直接在杭州集合。<br>记得 <span class="result-highlight">4月25号下午 3:30</span> 一起坐大巴哦！` : `已为您安排在 <span class="result-highlight">${guest.date}</span> 入住 <span class="result-highlight">${guest.room}</span>。<br>请务必在 <span class="result-highlight">4月25号下午 3:30</span> 在杭州酒店大堂集合乘坐大巴！`;
+            
+            resultDiv.innerHTML = `
+                <div class="result-name">🎉 尊贵的 ${guest.name}，欢迎您！</div>
+                <div class="result-detail">${arrangeText}</div>
+            `;
+            // 高级配色物理礼花特效
+            confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 }, colors: ['#8B0012', '#D4AF37', '#ffffff'] });
+        } else {
+            resultDiv.innerHTML = `<div class="result-detail" style="color: #8B0012;">抱歉，未能匹配到该姓名，请尝试输入完整的名字。</div>`;
+        }
+    }
+
+    const tableBody = document.getElementById('guestTable');
+    let hotelCount = 0, localCount = 12;
+    const roomCounts = {'纯大床房': 0, '双床/家庭等调配房': 0};
+
+    guests.forEach((guest, index) => {
+        const isLocal = guest.room === "在杭州";
+        const tagClass = isLocal ? 'tag-local' : 'tag-room';
+        
+        if (!isLocal) {
+            hotelCount += guest.num;
+            if (guest.room === '大床房') roomCounts['纯大床房']++;
+            else roomCounts['双床/家庭等调配房']++;
+        }
+        
+        const delay = (index * 0.05) + 0.5;
+        
+        tableBody.insertAdjacentHTML('beforeend', `
+            <tr style="animation-delay: ${delay}s;">
+                <td style="font-weight: bold; color: var(--primary-red);">${guest.name}</td>
+                <td><span class="tag ${tagClass}">${guest.room}</span></td>
+                <td>${guest.num} 人</td>
+                <td style="color: var(--text-gray);">${guest.date}</td>
+            </tr>
+        `);
+    });
+
+    Chart.defaults.font.family = "'Microsoft YaHei', sans-serif";
+    Chart.defaults.color = "#665C58";
+    
+    new Chart(document.getElementById('guestPieChart'), {
+        type: 'doughnut',
+        data: { labels: ['需安排酒店入住', '已在杭州本地'], datasets: [{ data: [hotelCount, localCount], backgroundColor: ['#8B0012', '#D4AF37'], borderWidth: 2, borderColor: '#ffffff', hoverOffset: 8 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '宾客住宿比例分析', font: {size: 15, weight: 'bold'}, color: '#8B0012' } }, cutout: '70%' }
+    });
+
+    new Chart(document.getElementById('roomBarChart'), {
+        type: 'bar',
+        data: { labels: Object.keys(roomCounts), datasets: [{ data: Object.values(roomCounts), backgroundColor: ['#8B0012', '#D4AF37'], borderRadius: 8, barThickness: 40 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '核心房型需求结构', font: {size: 15, weight: 'bold'}, color: '#8B0012' }, legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 2 } }, x: { grid: { display: false } } } }
+    });
+</script>
+
+</body>
+</html>
