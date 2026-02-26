@@ -7,7 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        /* 引入高级古典配色与排版变量 */
         :root {
             --primary-red: #8B0012;
             --gradient-red: #590008;
@@ -27,7 +26,6 @@
             overflow-x: hidden;
         }
 
-        /* 顶部视觉焕新：增加暗纹与流光溢彩的渐变 */
         header {
             background: linear-gradient(135deg, var(--gradient-red) 0%, var(--primary-red) 50%, var(--gradient-red) 100%);
             background-size: 200% 200%;
@@ -46,7 +44,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* 增加顶部精致背景暗纹 */
         header::before {
             content: '';
             position: absolute;
@@ -89,7 +86,6 @@
             font-weight: 300;
         }
 
-        /* 倒计时模块的珠宝级拟物化设计 */
         .countdown-container {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(12px);
@@ -137,7 +133,6 @@
             font-family: 'Microsoft YaHei', sans-serif;
         }
 
-        /* 升级后的卡片设计：高级感毛玻璃 */
         .container {
             max-width: 850px;
             margin: -70px auto 50px;
@@ -195,7 +190,6 @@
             opacity: 0.6;
         }
 
-        /* 更加精致的交互控件 */
         .search-area { display: flex; gap: 15px; margin-bottom: 25px; }
         .search-input { 
             flex: 1; 
@@ -242,8 +236,14 @@
         th { background: #fcf6f7; color: var(--primary-red); padding: 18px 15px; text-align: left; font-weight: bold; border-bottom: 2px solid rgba(139, 0, 18, 0.2); font-size: 1.05rem; }
         td { padding: 18px 15px; border-bottom: 1px solid #f0e6e6; font-size: 1rem; }
         
-        tbody tr { opacity: 0; animation: slideInRow 0.6s ease forwards; transition: background-color 0.3s; }
+        /* 移除了导致渲染失败的强制透明和复杂类冲突，改为稳定加载 */
+        tbody tr { transition: background-color 0.3s; }
         tbody tr:hover { background-color: #fdfaf6; }
+        
+        @keyframes stableSlideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
         
         .tag { padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; }
         .tag-room { background: #fff0f0; color: #c82333; border: 1px solid #ffcccc; }
@@ -332,7 +332,6 @@
         {name: "卢立论一家", room: "大床房", num: 2, date: "25号"}
     ];
 
-    // 更新发车时间为4月25日
     function updateCountdown() {
         const targetDate = new Date('2026-04-25T15:30:00').getTime();
         const now = new Date().getTime();
@@ -380,8 +379,9 @@
                 <div class="result-name">🎉 尊贵的 ${guest.name}，欢迎您！</div>
                 <div class="result-detail">${arrangeText}</div>
             `;
-            // 高级配色物理礼花特效
-            confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 }, colors: ['#8B0012', '#D4AF37', '#ffffff'] });
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 }, colors: ['#8B0012', '#D4AF37', '#ffffff'] });
+            }
         } else {
             resultDiv.innerHTML = `<div class="result-detail" style="color: #8B0012;">抱歉，未能匹配到该姓名，请尝试输入完整的名字。</div>`;
         }
@@ -391,6 +391,7 @@
     let hotelCount = 0, localCount = 12;
     const roomCounts = {'纯大床房': 0, '双床/家庭等调配房': 0};
 
+    // 采用稳定且兼容性高的内联动画属性赋值，确保列表在任何设备上顺利渲染
     guests.forEach((guest, index) => {
         const isLocal = guest.room === "在杭州";
         const tagClass = isLocal ? 'tag-local' : 'tag-room';
@@ -404,7 +405,7 @@
         const delay = (index * 0.05) + 0.5;
         
         tableBody.insertAdjacentHTML('beforeend', `
-            <tr style="animation-delay: ${delay}s;">
+            <tr style="animation: stableSlideIn 0.6s ease ${delay}s backwards;">
                 <td style="font-weight: bold; color: var(--primary-red);">${guest.name}</td>
                 <td><span class="tag ${tagClass}">${guest.room}</span></td>
                 <td>${guest.num} 人</td>
@@ -413,20 +414,23 @@
         `);
     });
 
-    Chart.defaults.font.family = "'Microsoft YaHei', sans-serif";
-    Chart.defaults.color = "#665C58";
-    
-    new Chart(document.getElementById('guestPieChart'), {
-        type: 'doughnut',
-        data: { labels: ['需安排酒店入住', '已在杭州本地'], datasets: [{ data: [hotelCount, localCount], backgroundColor: ['#8B0012', '#D4AF37'], borderWidth: 2, borderColor: '#ffffff', hoverOffset: 8 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '宾客住宿比例分析', font: {size: 15, weight: 'bold'}, color: '#8B0012' } }, cutout: '70%' }
-    });
+    // 确保在图表库成功加载的前提下安全渲染可视化数据
+    if (typeof Chart !== 'undefined') {
+        Chart.defaults.font.family = "'Microsoft YaHei', sans-serif";
+        Chart.defaults.color = "#665C58";
+        
+        new Chart(document.getElementById('guestPieChart'), {
+            type: 'doughnut',
+            data: { labels: ['需安排酒店入住', '已在杭州本地'], datasets: [{ data: [hotelCount, localCount], backgroundColor: ['#8B0012', '#D4AF37'], borderWidth: 2, borderColor: '#ffffff', hoverOffset: 8 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '宾客住宿比例分析', font: {size: 15, weight: 'bold'}, color: '#8B0012' } }, cutout: '70%' }
+        });
 
-    new Chart(document.getElementById('roomBarChart'), {
-        type: 'bar',
-        data: { labels: Object.keys(roomCounts), datasets: [{ data: Object.values(roomCounts), backgroundColor: ['#8B0012', '#D4AF37'], borderRadius: 8, barThickness: 40 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '核心房型需求结构', font: {size: 15, weight: 'bold'}, color: '#8B0012' }, legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 2 } }, x: { grid: { display: false } } } }
-    });
+        new Chart(document.getElementById('roomBarChart'), {
+            type: 'bar',
+            data: { labels: Object.keys(roomCounts), datasets: [{ data: Object.values(roomCounts), backgroundColor: ['#8B0012', '#D4AF37'], borderRadius: 8, barThickness: 40 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '核心房型需求结构', font: {size: 15, weight: 'bold'}, color: '#8B0012' }, legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 2 } }, x: { grid: { display: false } } } }
+        });
+    }
 </script>
 
 </body>
